@@ -5,10 +5,10 @@ import { Outlet } from "react-router-dom";
 function Layout() {
   return (
     <div className="layout">
-      <div className="navbar">
+      <div className="layout-navbar">
         <Navbar />
       </div>
-      <div className="content">
+      <div className="layout-content">
         <Outlet/>
       </div>
     </div>
