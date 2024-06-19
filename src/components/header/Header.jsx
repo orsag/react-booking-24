@@ -6,16 +6,18 @@ import {
   faPlane,
   faTaxi,
 } from "@fortawesome/free-solid-svg-icons";
+import { useLocation } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "./header.css";
 import { DateRange } from "react-date-range";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "react-date-range/dist/styles.css"; // main css file
 import "react-date-range/dist/theme/default.css"; // theme css file
 import { format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 
-const Header = ({ type }) => {
+const Header = () => {
+  const [hidden, setHidden] = useState(false);
   const [destination, setDestination] = useState("");
   const [openDate, setOpenDate] = useState(false);
   const [date, setDate] = useState([
@@ -33,6 +35,12 @@ const Header = ({ type }) => {
   });
 
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const isDisplayed = location.pathname.includes('hotels');
+    setHidden(isDisplayed);
+  }, [location.pathname])
 
   const handleOption = (name, operation) => {
     setOptions((prev) => {
@@ -47,13 +55,22 @@ const Header = ({ type }) => {
     navigate("/hotels", { state: { destination, date, options } });
   };
 
+  const handleOpening = (category) => {
+    if (category === 'date') {
+      setOpenDate(!openDate);
+      setOpenOptions(false);
+    } else if (category === 'options') {
+      setOpenOptions(!openOptions);
+      setOpenDate(false);
+    } else {
+      setOpenOptions(false);
+      setOpenDate(false);
+    }
+  }
+
   return (
     <div className="header">
-      <div
-        className={
-          type === "list" ? "headerContainer listMode" : "headerContainer"
-        }
-      >
+      <div className={hidden ? "headerContainer listMode" : "headerContainer"}>
         <div className="headerList">
           <div className="headerListItem active">
             <FontAwesomeIcon icon={faBed} />
@@ -76,7 +93,7 @@ const Header = ({ type }) => {
             <span>Airport taxis</span>
           </div>
         </div>
-        {type !== "list" && (
+        {!hidden && (
           <>
             <h1 className="headerTitle">
               A lifetime of discounts? It's Genius.
@@ -93,13 +110,14 @@ const Header = ({ type }) => {
                   type="text"
                   placeholder="Where are you going?"
                   className="headerSearchInput"
+                  onClick={() => handleOpening()}
                   onChange={(e) => setDestination(e.target.value)}
                 />
               </div>
               <div className="headerSearchItem">
                 <FontAwesomeIcon icon={faCalendarDays} className="headerIcon" />
                 <span
-                  onClick={() => setOpenDate(!openDate)}
+                  onClick={() => handleOpening('date')}
                   className="headerSearchText"
                 >{`${format(date[0].startDate, "MM/dd/yyyy")} to 
                 ${format(date[0].endDate, "MM/dd/yyyy")}`}</span>
@@ -117,7 +135,7 @@ const Header = ({ type }) => {
               <div className="headerSearchItem">
                 <FontAwesomeIcon icon={faPerson} className="headerIcon" />
                 <span
-                  onClick={() => setOpenOptions(!openOptions)}
+                  onClick={() => handleOpening('options')}
                   className="headerSearchText"
                 >{`${options.adult} adult · ${options.children} children · ${options.room} room`}</span>
                 {openOptions && (
@@ -189,7 +207,7 @@ const Header = ({ type }) => {
                 )}
               </div>
               <div className="headerSearchItem">
-                <button className="headerBtn" onClick={handleSearch}>
+                <button className="searchBtn" onClick={handleSearch}>
                   Search
                 </button>
               </div>

@@ -1,0 +1,41 @@
+.testingContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 220px;
+    width: 820px;
+    background: rgb(167, 253, 255);
+    background: linear-gradient(90deg, rgba(167, 253, 255, 1) 0%, rgba(255, 255, 255, 1) 45%, rgba(255, 255, 255, 1) 55%, rgba(106, 255, 188, 1) 100%);
+}
+
+.tBox {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.tFeaturedImg {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+}
+
+.tFeaturedImg2 {
+    width: 90px;
+    height: 76px;
+    object-fit: cover;
+}
+
+.tLeft {
+    padding: 6px;
+    border: 3px solid #28defe;
+    border-radius: 50%;
+}
+
+.tRight {
+    padding: 10px;
+    border: 3px solid #40b883;
+    border-radius: 50%;
+}
